@@ -1,109 +1,87 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+   FormBuilder,
+   FormControl,
+   FormGroup,
+   Validators,
 } from '@angular/forms';
 
-import { CategoriesService } from './../../services/categories.service';
-import { Category } from 'src/app/models/category';
+import { Service } from 'src/app/models/service';
+import { ServicesService } from '../../services/services.service';
 
 @Component({
-  selector: 'app-listview',
-  templateUrl: './listview.component.html',
-  styleUrls: ['./listview.component.css'],
+   selector: 'app-listview',
+   templateUrl: './listview.component.html',
+   styleUrls: ['./listview.component.css'],
 })
 export class ListviewComponent implements OnInit {
-  // component içerisinde yer alan properties bizim için state oluyor.
-  // ?: null olabilir demek.
-  // !: null olmayacak, bu property'i kullanmadan önce atama işlemini gerçekleştiriceğiz söz vermiş oluyoruz.
-  categories!: Category[];
-  language: string = 'en';
+   // component içerisinde yer alan properties bizim için state oluyor.
+   // ?: null olabilir demek.
+   // !: null olmayacak, bu property'i kullanmadan önce atama işlemini gerçekleştiriceğiz söz vermiş oluyoruz.
+   services!: Service[];
+   serviceForm!: FormGroup;
+   serviceIdToDelete: number = 0; // state
+   error: string = '';
 
-  categoryAddForm!: FormGroup;
+   constructor(
+      private servicesService: ServicesService,
+      private formBuilder: FormBuilder
+   ) { }
 
-  categoryIdToDelete: number = 0; // state
+   ngOnInit(): void {
+      this.getServices();
+      this.createServiceForm();
+   }
 
-  error: string = '';
+   createServiceForm() {
+      this.serviceForm = this.formBuilder.group({
+         name: ['', Validators.required],
+      });
+   }
 
-  //Angular IoC (Inversion of Control) Container kullanır.
-  //Dependency Injection (Bağımlılık Enjeksiyonu)
-  constructor(
-    private categoriesService: CategoriesService,
-    private formBuilder: FormBuilder
-  ) {}
+   getServices(): void {
+      this.servicesService.getServices().subscribe((response) => {
+         this.services = response;
+      });
+   }
 
-  ngOnInit(): void {
-    this.getCategories();
-    this.createCategoryAddForm();
-  }
+   // changeserviceIdToDelete(event: any) {
+   //   this.serviceIdToDelete = event.target.value;
+   // }
 
-  createCategoryAddForm() {
-    this.categoryAddForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-    });
-  }
+   add(): void {
+      if (this.serviceForm.invalid) {
+         this.error = 'Form is invalid';
+         return;
+      }
+      if (this.error) this.error = '';
 
-  getCategories(): void {
-    // Object tipi henüz belli olmayan referans tip diyebiliriz. Referans tiplerin en temel sınıfı diyebiliriz.
-    this.categoriesService.getCategories().subscribe((response) => {
-      // Observer Design Pattern
-      this.categories = response;
-    });
+      const service: Service = {
+         ...this.serviceForm.value,
+      };
+      this.servicesService.add(service).subscribe({
+         next: (response) => {
+            console.info(`Service(${response.id}) has added.`);
+         },
+         error: (err) => {
+            console.log(err);
 
-    this.categoriesService.getCategories().subscribe((response) => {
-      // Observer Design Pattern
-      this.categories = response;
-    });
-  }
+            this.error = err.statusText;
+         },
+         complete: () => {
+            if (this.error) this.error = '';
+            this.serviceForm.reset();
+            this.getServices();
+         },
+      });
+   }
 
-  // changecategoryIdToDelete(event: any) {
-  //   this.categoryIdToDelete = event.target.value;
-  // }
+   edit() {
+   }
 
-  add(): void {
-    if (this.categoryAddForm.invalid) {
-      this.error = 'Form is invalid';
-      return;
-    }
-    if (this.error) this.error = '';
-
-    // const {name, description} = this.categoryAddForm.value;
-    // // this.categoryAddForm.value
-    // const category: Category = {
-    //   id: 0,
-    //   // name: name,
-    //   name,
-    //   description,
-    // };
-
-    // spread operator ... (ES6)
-    const category: Category = {
-      ...this.categoryAddForm.value,
-    };
-    this.categoriesService.add(category).subscribe({
-      next: (response) => {
-        console.info(`Category(${response.id}) has added.`);
-      },
-      error: (err) => {
-        console.log(err);
-
-        this.error = err.statusText;
-      },
-      complete: () => {
-        if (this.error) this.error = '';
-        this.categoryAddForm.reset();
-        this.getCategories();
-      },
-    });
-  }
-
-  delete() {
-    this.categoriesService.delete(this.categoryIdToDelete).subscribe(() => {
-      this.categoryIdToDelete = 0;
-      this.getCategories();
-    });
-  }
+   delete(id: number) {
+      this.servicesService.delete(id).subscribe(() => {
+         this.getServices();
+      });
+   }
 }

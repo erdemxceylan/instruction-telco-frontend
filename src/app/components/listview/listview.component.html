@@ -1,38 +1,19 @@
-<!-- directive -->
-<!-- ngFor -->
-<!-- ngIf -->
-<ng-container *ngIf="language == 'tr'; else enMessage">
-  <div>Merhaba</div>
-</ng-container>
-
-<ng-template #enMessage>
-  <div>Hello</div>
-</ng-template>
-
-<!--  Kategori ismi 3 haneden kısa ise yazılmasın! -->
-<ul *ngIf="categories">
-  <ng-template ngFor let-item [ngForOf]="categories">
-    <li *ngIf="item.name.length > 3">{{ item.id }} {{ item.name }}</li>
-  </ng-template>
-</ul>
-
 <!-- Reactive Form -->
-<h2>Form - Add</h2>
-<form [formGroup]="categoryAddForm" (submit)="add()">
+<form [formGroup]="serviceForm" (submit)="add()">
+  <input formControlName="name" type="text" placeholder="Enter service name" />
+  <button type="submit" class="btn btn-primary">Add</button>
   <p>{{ error }}</p>
-  <input formControlName="name" type="text" placeholder="Enter name" />
-  <input
-    formControlName="description"
-    type="text"
-    placeholder="Enter description"
-  />
-  <button type="submit">Add</button>
 </form>
 
+<div *ngFor="let service of services">
+  <p>{{ service.name }}</p>
+  <button class="btn btn-primary" (click)="edit()">Düzenle</button>
+  <button class="btn btn-dark" (click)="delete(service.id)">Sil</button>
+</div>
+
 <!-- ngModel Form -->
-<h1>Form - Delete</h1>
+<!-- <h3>Form - Delete</h3>
 Silecek olan id: {{ categoryIdToDelete }}
 <div>
   <input type="text" placeholder="id" [(ngModel)]="categoryIdToDelete" />
-  <button class="btn btn-danger" (click)="delete()">Sil</button>
-</div>
+</div> -->
