@@ -5,8 +5,9 @@ import { LocalStorageService } from './local-storage.service';
 import { LoginDTO } from '../models/loginDTO';
 import { LoginResponse } from '../models/loginResponse';
 import { Observable } from 'rxjs';
-import { Response } from '../models/response';
 import { environment } from 'src/environments/environment';
+
+export const TOKEN_KEY = 'TOKEN_KEY';
 
 @Injectable({
    providedIn: 'root',
@@ -28,18 +29,16 @@ export class AuthService {
    }
 
    logout() {
-      this.localStorage.remove('token');
+      this.localStorage.remove(TOKEN_KEY);
    }
 
    get isAuthenticated(): boolean {
-      // varsa süresi geçmişse yine false
-      let token = this.localStorage.get('token');
-      if (!token) return false;
+      if (!this.localStorage.get(TOKEN_KEY)) return false;
       if (this.jwtHelperService.isTokenExpired()) return false;
       return true;
    }
 
    get jwtToken(): string | null {
-      return this.localStorage.get('token');
+      return this.localStorage.get(TOKEN_KEY);
    }
 }
