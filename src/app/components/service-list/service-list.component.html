@@ -1,0 +1,18 @@
+<!-- Reactive Form -->
+<form [formGroup]="addForm" (submit)="add()">
+  <input formControlName="name" type="text" placeholder="Enter service name" />
+  <button type="submit" class="btn btn-primary">Ekle</button>
+  <p>{{ addError }}</p>
+</form>
+
+<div *ngFor="let service of services">
+  <p>{{ service.name }}</p>
+  <button class="btn btn-primary" (click)="edit(service.id)">Düzenle</button>
+  <button class="btn btn-dark" (click)="delete(service.id)">Sil</button>
+</div>
+
+<form *ngIf="isEditing" [formGroup]="editForm" (submit)="update()">
+  <input formControlName="name" type="text" placeholder="Enter service name" />
+  <button type="submit" class="btn btn-primary">Güncelle</button>
+  <p>{{ editError }}</p>
+</form>
