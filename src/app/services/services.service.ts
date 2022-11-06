@@ -6,19 +6,13 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({
    providedIn: 'root',
-}) // Attribute
+})
 export class ServicesService {
    controllerUrl = `${environment.apiUrl}/services`;
-   // private httpClient: HttpClient;
-   // getCategoriesResponse: Object = {};
 
-   constructor(private httpClient: HttpClient) {
-      // this.httpClient = httpClient;
-   }
+   constructor(private httpClient: HttpClient) { }
 
-   // Generic / Jenerik beraber class'lara ve metotlara üzerinde çalışlacak bir tip geçebiliyoruz.
    getServices(): Observable<Service[]> {
-      //get metodu Get Http istediğini hazırlıyor.
       return this.httpClient.get<Service[]>(this.controllerUrl);
    }
 
@@ -27,10 +21,7 @@ export class ServicesService {
    }
 
    update(service: Service): Observable<Service> {
-      return this.httpClient.put<Service>(
-         `${this.controllerUrl}/${service.id}`,
-         service
-      );
+      return this.httpClient.put<Service>(`${this.controllerUrl}/${service.id}`, service);
    }
 
    delete(id: number): Observable<void> {
