@@ -7,6 +7,7 @@ import {
 
 import { Service } from 'src/app/models/service';
 import { ServicesService } from '../../services/services.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
    selector: 'app-service-list',
@@ -24,7 +25,8 @@ export class ServiceListComponent implements OnInit {
 
    constructor(
       private servicesService: ServicesService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private toastr: ToastrService
    ) { }
 
    ngOnInit(): void {
@@ -49,6 +51,7 @@ export class ServiceListComponent implements OnInit {
 
    add(): void {
       if (this.addForm.invalid) {
+         this.toastr.warning('Lütfen bir servis ismi giriniz');
          this.addError = 'Form is invalid';
          return;
       }
@@ -60,11 +63,13 @@ export class ServiceListComponent implements OnInit {
 
       this.servicesService.add(service).subscribe({
          next: () => {
-            console.info(`${service.name} has been added.`);
+            this.toastr.success(`${service.name} has been added.`);
          },
          error: (err) => {
             console.log(err);
             this.addError = err.statusText;
+            this.toastr.error(this.addError);
+            this.toastr.error(err.statusText);
          },
          complete: () => {
             if (this.addError) this.addError = '';
@@ -94,11 +99,13 @@ export class ServiceListComponent implements OnInit {
 
       this.servicesService.update(service).subscribe({
          next: () => {
-            console.info('İşlem başarılı');
+            this.toastr.success('İşlem başarılı');
          },
          error: (err) => {
             console.log(err);
             this.editError = err.statusText;
+            this.toastr.error(this.editError);
+            this.toastr.error(err.statusText);
          },
          complete: () => {
             if (this.editError) this.editError = '';

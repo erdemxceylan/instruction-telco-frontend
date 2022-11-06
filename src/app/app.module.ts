@@ -3,6 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { CreateFakeArrayPipe } from './pipes/create-fake-array.pipe';
 import { HomepageComponent } from './pages/homepage/homepage.component';
@@ -12,6 +13,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { NgModule } from '@angular/core';
 import { ServiceListComponent } from './components/service-list/service-list.component';
 import { SplitPipe } from './pipes/split.pipe';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
    declarations: [AppComponent, ServiceListComponent, CreateFakeArrayPipe, SplitPipe, LoginComponent, HomepageComponent, LoadingComponent],
@@ -21,6 +23,8 @@ import { SplitPipe } from './pipes/split.pipe';
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule,
+      BrowserAnimationsModule,
+      ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
    ],
    exports: [],
    providers: [
