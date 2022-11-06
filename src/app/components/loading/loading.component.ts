@@ -17,15 +17,15 @@ export class LoadingComponent implements OnInit {
    }
 
    subscribeToLoading() {
-      this.loadingService.isLoadingSubject.subscribe((isLoading) => {
+      this.loadingService.isLoadingSubject.subscribe(isLoading => {
          this.isLoading = isLoading;
-         console.log(`Is Loading değeri: ${isLoading}`);
       });
    }
 
    startLoading() {
       this.loadingService.startLoading();
    }
+
    stopLoading() {
       this.loadingService.stopLoading();
    }
