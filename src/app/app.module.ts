@@ -11,6 +11,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { LoginComponent } from './pages/login/login.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { NgModule } from '@angular/core';
 import { ServiceListComponent } from './components/service-list/service-list.component';
 import { SplitPipe } from './pipes/split.pipe';
@@ -19,7 +20,16 @@ import { ToastrModule } from 'ngx-toastr';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
-   declarations: [AppComponent, ServiceListComponent, CreateFakeArrayPipe, SplitPipe, LoginComponent, HomepageComponent, LoadingComponent],
+   declarations: [
+      AppComponent,
+      ServiceListComponent,
+      CreateFakeArrayPipe,
+      SplitPipe,
+      LoginComponent,
+      HomepageComponent,
+      LoadingComponent,
+      NavbarComponent
+   ],
    imports: [
       BrowserModule,
       AppRoutingModule,
